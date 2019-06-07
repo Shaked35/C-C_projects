@@ -1,0 +1,144 @@
+#include<stdio.h>
+#include <stdlib.h>
+#include <ctype.h>
+#define N 11
+enum flag{ TRUE=1 , FALSE=0 };
+typedef int adjmat[N][N];
+typedef int true_cells_array[N]; 
+int path(adjmat,int, int);
+void print_matrix(adjmat);
+void get_tree_data(adjmat);
+void unlimited_path(adjmat);
+
+int main(){
+
+adjmat matrix;
+int next=0;/*The next char*/
+int father=0;
+int sun=0;
+int sol=0;/*solition of path method*/
+int size = N-1;
+get_tree_data(matrix);
+print_matrix(matrix);
+printf("\n please insert 2 numbers between 0 - %d to test path method\n",size);
+scanf("%d %d %d",&next,&father,&sun); 
+printf("\n %d %d \n",father,sun);
+sol = path(matrix,father,sun);
+if(sol==TRUE)
+	printf("%d is one of the suns of %d \n",sun,father);/*we found a path*/
+else
+	printf("%d isn't one of the suns of %d \n",sun,father);
+unlimited_path(matrix);
+return 0;
+}
+
+/*
+* Path is a boolean method that check if 'col' is one of the suns of 'row'.
+* In this method we looking for all the suns of 'row'.
+* @return - true if we found a path between 'row' to 'col'.
+*/
+int path(adjmat matrix,int row, int col){
+int i=0;
+int sol=0;
+/*If this is ileagal numbers*/
+if(row >N || col > N){
+	return 0;
+}
+if(matrix[row][col] == TRUE){
+	return 1;}
+else {
+	/*Cheking suns of row number*/
+	for (i=0;i<N;i++){
+		/*check if we have longer path*/
+		if(matrix[row][i]==TRUE){
+			sol = path(matrix,i,col);
+			if(sol == TRUE){
+			return 1;}}				
+		}
+	}		
+return 0;
+}
+
+/*
+* Printing method.
+* Print matrix values.
+*/
+void print_matrix(adjmat matrix){
+int i=0;
+int j=0;
+for(;i<N;i++){
+	printf("\n");
+	for(j=0;j<N;j++)
+		printf("%d  ",matrix[i][j]);
+
+printf("\n");
+}
+}
+
+/*
+* Get matrix values from the client.
+* @param - admat matrix.
+*/
+void get_tree_data(adjmat matrix){
+int size = N*N;
+int row=0;
+int col=0;
+int cell=0;
+int flag=0;
+int collect[N*N];
+printf("\n Please insert matrix values, %d cells", size);
+printf("\n FALSE = 0, TRUE = 1 \n");
+/*collect number into array*/
+while ((cell<size) && (flag!='\n') && (flag!=EOF)){
+	flag = getchar();
+	if(flag=='0'){
+		collect[cell] = FALSE;
+		cell++;}
+	else if(flag=='1'){
+		collect[cell] = TRUE;
+		cell++;}
+	else
+		printf(" wrong number");}
+/*insert into ajmat*/
+for(cell=0;row<N;row++){
+	for(col=0;col<N;col++,cell++){
+		if(collect[cell]== TRUE)
+			matrix[row][col] = TRUE;
+		else
+			matrix[row][col] = FALSE;
+	  	}
+	}	
+}
+
+/*
+* This method get from the client and check with path method if there
+* is a path between them.
+* @param - admat matrix.
+*/
+void unlimited_path(adjmat matrix){
+/*int next = 0;*/
+int father=0;
+int sun=0;
+int sol=0;
+/*next = getchar();
+printf("\n %d\n",next);*/
+printf("\n Please insert 'father' number and 'sun' number\n");
+while(((sun!=-1) && (father!=-1)) || (father!=EOF) || (sun!=EOF)){
+	scanf(" %d %d",&father,&sun);
+	printf("\nfather: %d sun: %d \n",father,sun);
+	sol = path(matrix,father,sun);
+	if(sol==TRUE)
+		printf("%d is one of the suns of %d \n",sun,father);/*there is path*/
+	else
+		printf("%d isn't one of the suns of %d \n",sun,father);
+	}
+printf("\n The END \n");
+
+}
+
+
+
+
+
+
+
