@@ -1,0 +1,4 @@
+myProg1: Node.o
+	gcc -g -Wall -ansi -pedantic Node.o -o myProg1 -lm
+Node.o: Node.c 
+	gcc -c -Wall -ansi -pedantic Node.c -o  Node.o -lm
